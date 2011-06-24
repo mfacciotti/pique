@@ -1,65 +1,55 @@
-\documentclass{bioinfo}
-%\usepackage{amsmath}
-%\usepackage{enumerate}
-\usepackage{graphicx}
-%\author{R.Y.~Neches \& E.G.~Wilbanks} 
+\documentclass{bioinfo} %\usepackage{amsmath} %\usepackage{enumerate}
+\usepackage{graphicx} %\author{R.Y.~Neches \& E.G.~Wilbanks}
 %\title{Analyzing ChIP-seq data with Pique}
 
 %\addtolength{\oddsidemargin}{-.875in}
 %\addtolength{\evensidemargin}{-.875in}
-%\addtolength{\textwidth}{1.75in}
-%\addtolength{\topmargin}{-.875in}
+%\addtolength{\textwidth}{1.75in} %\addtolength{\topmargin}{-.875in}
 %\addtolength{\textheight}{1.75in}
 
-\copyrightyear{2011}
-\pubyear{2011}
+\copyrightyear{2011} \pubyear{2011}
 
-% This writeup is intended to be submitted to Bioinformatics as an
-% Applicaiton Note under either the Gene Expression or Sequence
-% Analysis. These are the instructions to authors :
-%
-% Application Notes (up to 2 pages; this is approx. 1300 words or 1000
-% words plus one figure) : Applications Notes are short descriptions
-% of novel software or new algorithm implementations, databases and
-% network services (web servers, and interfaces). Software or data
-% must be freely available to non-commercial users. Availability and
-% Implementation must be clearly stated in the article. Authors must
-% also ensure that the software is available for a full TWO YEARS
-% following publication. Web services must not require mandatory
-% registration by the user. Additional Supplementary data can be
-% published online-only by the journal. This supplementary material
-% should be referred to in the abstract of the Application Note. If
-% describing software, the software should run under nearly all
-% conditions on a wide range of machines. Web servers should not be
-% browser specific. Application Notes must not describe trivial
-% utilities, nor involve significant investment of time for the user
-% to install.
-%
-% Software : If the manuscript describes new software tools or the
-% implementation of novel algorithms the software must be freely
-% available to non-commercial users at the time of submission, and
-% appropriate test data should be made available. Availability must be
-% clearly stated in the article. Authors must also ensure that the
-% software and test data is available for a full TWO YEARS following
-% publication. The editors of Bioinformatics encourage authors to make
-% their source code available and, if possible, to provide access
-% through an open source license (see www.opensource.org for
-% examples). Authors should make every effort to use URLs that will
-% remain stable. At the minimum, authors must provide one of:
-% webserver, source code or binary.
-%
-% http://www.oxfordjournals.org/our_journals/bioinformatics/
+% This writeup is intended to be submitted to Bioinformatics as an %
+Applicaiton Note under either the Gene Expression or Sequence %
+Analysis. These are the instructions to authors : % % Application Notes
+(up to 2 pages; this is approx. 1300 words or 1000 % words plus one
+figure) : Applications Notes are short descriptions % of novel software
+or new algorithm implementations, databases and % network services (web
+servers, and interfaces). Software or data % must be freely available to
+non-commercial users. Availability and % Implementation must be clearly
+stated in the article. Authors must % also ensure that the software is
+available for a full TWO YEARS % following publication. Web services
+must not require mandatory % registration by the user. Additional
+Supplementary data can be % published online-only by the journal. This
+supplementary material % should be referred to in the abstract of the
+Application Note. If % describing software, the software should run
+under nearly all % conditions on a wide range of machines. Web servers
+should not be % browser specific. Application Notes must not describe
+trivial % utilities, nor involve significant investment of time for the
+user % to install. % % Software : If the manuscript describes new
+software tools or the % implementation of novel algorithms the software
+must be freely % available to non-commercial users at the time of
+submission, and % appropriate test data should be made available.
+Availability must be % clearly stated in the article. Authors must also
+ensure that the % software and test data is available for a full TWO
+YEARS following % publication. The editors of Bioinformatics encourage
+authors to make % their source code available and, if possible, to
+provide access % through an open source license (see www.opensource.org
+for % examples). Authors should make every effort to use URLs that will
+% remain stable. At the minimum, authors must provide one of: %
+webserver, source code or binary. % %
+http://www.oxfordjournals.org/our_journals/bioinformatics/
 
-\begin{document}
-\firstpage{1}
+\begin{document} \firstpage{1}
 
-\title[In a fit of pique]{Analyzing high coverage microbial ChIP-seq data with Pique}
-\author[Neches \textit{et~al}]{R.Y.~Neches\,$^{1,3}$\footnote{to whom
-    correspondence should be addressed}, E.G.~Wilbanks\,$^{1,3}$ and
-  M.T.~Facciotti\,$^{2,3}$
-\address{$^{1}$Microbiology Graduate Group, University of California, Davis.\\
-  $^{2}$Department of Biomedical Engineering, University of
-  California, Davis.\\$^{3}$Genome Center, University of California, Davis.}
+\title[In a fit of pique]{Analyzing high coverage microbial ChIP-seq
+data with Pique} \author[Neches
+\textit{et~al}]{R.Y.~Neches\,$^{1,3}$\footnote{to whom correspondence
+should be addressed}, E.G.~Wilbanks\,$^{1,3}$ and
+M.T.~Facciotti\,$^{2,3}$ \address{$^{1}$Microbiology Graduate Group,
+University of California, Davis.\\ $^{2}$Department of Biomedical
+Engineering, University of California, Davis.\\$^{3}$Genome Center,
+University of California, Davis.}
 
 \history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
 
@@ -69,41 +59,92 @@
 
 %\newcommand{\imsize}{0.45\columnwidth}
 %\newcommand{\threeup}{0.26\columnwidth}
-%\newcommand{\cotwo}{$\text{CO}_{2}$}
-%\newcommand{\htwo}{$\text{H}_2$}
+%\newcommand{\cotwo}{$\text{CO}_{2}$} %\newcommand{\htwo}{$\text{H}_2$}
 %\newcommand{\otwo}{$\text{O}_2$}
 %\newcommand{\water}{$\text{H}_2\text{O}$}
 %\newcommand{\htwos}{$\text{H}_2\text{S}$}
 
-\begin{abstract}
-\section{Motivation:}
+\begin{abstract} \section{Motivation:}
 
-Most ChIP-Seq peak finders are designed to protein-DNA binding events in eukaryotic datasets. To make cost-effective use of current sequencing capacity, the peak finders must be cleverly optimized to work with sparse-coverage data, and must take into account the effect of chromatin structure on the variation in background coverage. While numerous effective peak finders have been developed  for eukaryotic data, these algorithmic approaches can be suprisingly error prone in our hands when run on high-coverage bacterial and archaeal ChIP-Seq datasets.  
+Most ChIP-Seq peak finders are designed to protein-DNA binding events in
+eukaryotic datasets. To make cost-effective use of current sequencing
+capacity, the peak finders must be cleverly optimized to work with
+sparse-coverage data, and must take into account the effect of chromatin
+structure on the variation in background coverage. While numerous
+effective peak finders have been developed for eukaryotic data, these
+algorithmic approaches can be suprisingly error prone in our hands when
+run on high-coverage bacterial and archaeal ChIP-Seq datasets.
 
-% Why not? Examples, evidence, hypothesis. 
+% Why not? Examples, evidence, hypothesis.
 
-\section{Results:}
-Fortunately, many of the statistical challenges for peak detection inherent in eukaryotic ChIP-seq data are not present in bacterial and archaeal datasets; this is due in part to higher genome coverage -- typically in inverse proportion to genome size -- and in part to the absence of non-random coverage variation due to highly structured chromatin.  In response, we have developed Pique, a conceptually simple, easy to run ChIP-Seq peak finding pipeline for bacterial and archaeal ChIP-Seq data.  The software is cross-platform, implemented in Python.  Output is easily imported into the Gaggle Genome Browser for manual curation of peaks and the exploration of the dataset in the context of Gaggle-enabled resources.  
+\section{Results:} Fortunately, many of the statistical challenges for
+peak detection inherent in eukaryotic ChIP-seq data are not present in
+bacterial and archaeal datasets; this is due in part to higher genome
+coverage -- typically in inverse proportion to genome size -- and in
+part to the absence of non-random coverage variation due to highly
+structured chromatin.  In response, we have developed Pique, a
+conceptually simple, easy to run ChIP-Seq peak finding pipeline for
+bacterial and archaeal ChIP-Seq data.  The software is cross-platform,
+implemented in Python.  Output is easily imported into the Gaggle Genome
+Browser for manual curation of peaks and the exploration of the dataset
+in the context of Gaggle-enabled resources.
 
-\section{Availability:} 
-RUSSELL - The software is available under the BSD-3 license at http://github.com/ryneches/pique.
+\section{Availability:} RUSSELL - The software is available under the
+BSD-3 license at http://github.com/ryneches/pique.
 
 \section{Contact:} \href{ryneches@ucdavis.edu}{ryneches@ucdavis.edu}
 
 \end{abstract}
 
-\section{Introduction}
-Next generation sequencing coupled with chromatin immunoprecipitation (ChIP-Seq) is revolutionizing our abilty to genomically map protein-DNA associations for a wide variety of proteins.  The growing popularity of ChIP-Seq has spurred the  development of numerous peak picking algorithms.  All but one, (CSDeconv (REF)) of the peak picking algorithms have been designed to perform well on eukaryotic datasets.  To make most cost-effective use of current sequencing abilities the peak picking methods have employed a number of sophisticated strategies to detect peaks in the typically sparcely covered eukaryotic datasets for which they are designed.  The problem of finding peaks in such data is apparently so challenging that over 30 different methods have been published since 2007.  The relative performance of 11 represetative peak detection algorithms on eukatyoric data has been recently reviewed by Wilbanks and Facciotti (REF). 
+\section{Introduction} Next generation sequencing coupled with chromatin
+immunoprecipitation (ChIP-Seq) is revolutionizing our abilty to
+genomically map protein-DNA associations for a wide variety of proteins.
+ The growing popularity of ChIP-Seq has spurred the  development of
+numerous peak picking algorithms. All but one, (CSDeconv (REF)) of the
+peak picking algorithms have been designed to perform well on eukaryotic
+datasets.  To make most cost-effective use of current sequencing
+abilities the peak picking methods have employed a number of
+sophisticated strategies to detect peaks in the typically sparcely
+covered eukaryotic datasets for which they are designed.  The problem of
+finding peaks in such data is apparently so challenging that over 30
+different methods have been published since 2007.  The relative
+performance of 11 represetative peak detection algorithms on eukatyoric
+data has been recently reviewed by Wilbanks and Facciotti (REF).
 
-While ChIP-Seq has been predominantly used to interrogate protein-DNA interactions in eukaryotic systems (REFS) there are clear advantages to adopting this technology for studying microbial systems that are largely associated with the relatively small sizes of microbial genomes (e.g. the E. coli genome is ~2000 smaller than the human genome).  Surprisingly, however, existing peak detection algorithms designed for eukaryotic systems have, in our hands, been error prone with microbial ChIP-Seq data.  To our knowledge, only one other peak finding package, CSDeconv (REF) has been explicitly developed for finding peaks in microbial ChIP-Seq data.  This MATLAB package does a good job (WE THINK) of finding peaks in microbial ChIP-Seq data but it's broad applicaiton is limited by the requirement for the proprietary software package MATLAB, relatively slow performance and lack of easy peak curation options.  Herein we describe Pique, a conceptually simple, Python-based peak finding package that enables easy and rapid peak finding in bacterial and archaeal ChIP-Seq datasets.  The output is easily imported into the Gaggle Genome Browser (REF) to enable rapid manual peak list curation and analysis of ChIP-Seq data in the context of other Gaggle-enabled (REF) resources.  
+While ChIP-Seq has been predominantly used to interrogate protein-DNA
+interactions in eukaryotic systems (REFS) there are clear advantages to
+adopting this technology for studying microbial systems that are largely
+associated with the relatively small sizes of microbial genomes (e.g.
+the E. coli genome is ~2000 smaller than the human genome). 
+Surprisingly, however, existing peak detection algorithms designed for
+eukaryotic systems have, in our hands, been error prone with microbial
+ChIP-Seq data.  To our knowledge, only one other peak finding package,
+CSDeconv (REF) has been explicitly developed for finding peaks in
+microbial ChIP-Seq data.  This MATLAB package does a good job (WE THINK)
+of finding peaks in microbial ChIP-Seq data but it's broad applicaiton
+is limited by the requirement for the proprietary software package
+MATLAB, relatively slow performance and lack of easy peak curation
+options.  Herein we describe Pique, a conceptually simple, Python-based
+peak finding package that enables easy and rapid peak finding in
+bacterial and archaeal ChIP-Seq datasets.  The output is easily imported
+into the Gaggle Genome Browser (REF) to enable rapid manual peak list
+curation and analysis of ChIP-Seq data in the context of other
+Gaggle-enabled (REF) resources.
 
-\section{Approach}
-ChIP-seq in bacteria and archaea yields coverage several orders of magnitude larger than in eukaryotic systems.  This generates data with near-continuous signal across the microbial chromosome rather than the otherwise sparse coverage typically present in eukaryotic ChIP-Seq data.  This elemenatry feature of microbial ChIP-Seq data allows for greater simplicity of design through the use several standard algorithms and design principles from signal processing.
+\section{Approach} ChIP-seq in bacteria and archaea yields coverage
+several orders of magnitude larger than in eukaryotic systems.  This
+generates data with near-continuous signal across the microbial
+chromosome rather than the otherwise sparse coverage typically present
+in eukaryotic ChIP-Seq data.  This elemenatry feature of microbial
+ChIP-Seq data allows for greater simplicity of design through the use
+several standard algorithms and design principles from signal
+processing.
 
-Finally, given the importance of manual curation and
-settings optimization, Pique provides output suitable for use in the
-Gaggle Genome Browser. This permits convenient interactive curation of
-the peak list and analysis of the ChIP-Seq data in the context of other Gaggle-enabled resources.   
+Finally, given the importance of manual curation and settings
+optimization, Pique provides output suitable for use in the Gaggle
+Genome Browser. This permits convenient interactive curation of the peak
+list and analysis of the ChIP-Seq data in the context of other
+Gaggle-enabled resources.
 
 
 
@@ -111,49 +152,49 @@ the peak list and analysis of the ChIP-Seq data in the context of other Gaggle-e
 
 
 
-\begin{methods}
-\section{Methods}
+\begin{methods} \section{Methods}
 
-Prior to running Pique, 40-bp Illumina (Solexa) reads sould be quality filtered, quality trimmed, and aligned to a reference genome using a favorite short-read sequence aligner. 
+Prior to running Pique, 40-bp Illumina (Solexa) reads sould be quality
+filtered, quality trimmed, and aligned to a reference genome using a
+favorite short-read sequence aligner.
 
-Reads mapped in the forward and reverse orientation are
-separated, and used to calculate distinct coverage tracks. (IS THIS STILL FOR REAL?)
+Reads mapped in the forward and reverse orientation are separated, and
+used to calculate distinct coverage tracks. (IS THIS STILL FOR REAL?)
 
 \begin{itemize}
 
 \item Raw data is normalized with respect to the background. The user
-  selects one or more regions which are representative of the
-  un-enriched background. Resequenced genomes often have coverage
-  artifacts caused by features such as repetitive regions and gene
-  dosage variation. For this reason, we advise the use of curated
-  background regions. This operation is carried out by
-  \texttt{piquify.py}.
+selects one or more regions which are representative of the un-enriched
+background. Resequenced genomes often have coverage artifacts caused by
+features such as repetitive regions and gene dosage variation. For this
+reason, we advise the use of curated background regions. This operation
+is carried out by \texttt{piquify.py}.
 
 \item A mask is applied to the ChIP track to remove regions with
-  ambiguous read mapping. For example, it is impossible to map reads
-  to unique loci in highly repetitive or palindromic regions, such as
-  IS elements. As a result, the coverage is impossible to measure
-  unambiguously, and the regions must be excluded from downstream
-  analysis. (\texttt{pique.py})
+ambiguous read mapping. For example, it is impossible to map reads to
+unique loci in highly repetitive or palindromic regions, such as IS
+elements. As a result, the coverage is impossible to measure
+unambiguously, and the regions must be excluded from downstream
+analysis. (\texttt{pique.py})
 
 \item The ``DC'' component is removed using linear detrending
-  (scipy.detrend). This removes effects due to coverage variation
-  features larger than about 100Kb. (\texttt{pique.py})
+(scipy.detrend). This removes effects due to coverage variation features
+larger than about 100Kb. (\texttt{pique.py})
 
 \item High-$k$ noise in coverage is removed using a Wiener-Kolmogorov
-  filter. The filter delay $\alpha$ is chosen to approximate to the
-  expected footprint size of the targeted protein. (\texttt{pique.py})
+filter. The filter delay $\alpha$ is chosen to approximate to the
+expected footprint size of the targeted protein. (\texttt{pique.py})
 
 \item A coverage amplitude cutoff calculated from the detrended
-  background track such that any given locus is equally likely to be
-  above or below the cutoff. Enrichment features are defined with
-  respect to this coverage level (\texttt{pique.py})
+background track such that any given locus is equally likely to be above
+or below the cutoff. Enrichment features are defined with respect to
+this coverage level (\texttt{pique.py})
 
-\item A sliding window moving average is used to identify regions
-  whose coverage level deviates from the background. Peaks usually
-  contain gaps in coverage that with widths on the order of the
-  experimentally selected fragment size; the window width is chosen to
-  correspond to this size. (\texttt{pique.py})
+\item A sliding window moving average is used to identify regions whose
+coverage level deviates from the background. Peaks usually contain gaps
+in coverage that with widths on the order of the experimentally selected
+fragment size; the window width is chosen to correspond to this size.
+(\texttt{pique.py})
 
 
 % FIXME : Lizzy needs to verify that this is indeed the case
@@ -167,63 +208,62 @@ binding events, we apply a very simple statistical model :
 \begin{itemize}
 
 \item Coordinates of enriched regions in a peak are offset between
-  strands, with the forward strand enriched upstream of the reverse
-  strand. The first condition of the model is that the envelops must
-  be overlapping rectangles; the end coordinate of the forward strand
-  envelope must fall within the reverse strand envelope, and the
-  start coordinate of the reverse strand envelope must fall within the
-  forward strand envelope. 
+strands, with the forward strand enriched upstream of the reverse
+strand. The first condition of the model is that the envelops must be
+overlapping rectangles; the end coordinate of the forward strand
+envelope must fall within the reverse strand envelope, and the start
+coordinate of the reverse strand envelope must fall within the forward
+strand envelope.
 
-\item Enrichment that are thought to represent binding events produce
-  a characteristic shape envelope, which we model using a sum over set
-  of Gaussians.
+\item Enrichment that are thought to represent binding events produce a
+characteristic shape envelope, which we model using a sum over set of
+Gaussians.
 
 \end{itemize}
 
 \end{methods}
 
 \begin{figure}[!tfbd peak - a nice one]%figure1
-%\centerline{\includegraphics{fig01.eps}}
-\caption{HOW ABOUT A FIGURE OF A PEAK with rectangular envelope and subsequent shape envelope}\label{fig:01}
-\end{figure}
+%\centerline{\includegraphics{fig01.eps}} \caption{HOW ABOUT A FIGURE OF
+A PEAK with rectangular envelope and subsequent shape
+envelope}\label{fig:01} \end{figure}
 
 \begin{figure}[!tfbd data - reasonable spot showing curation]%figure2
-%\centerline{\includegraphics{fig02.eps}}
-\caption{GAGGLE GENOME BROWSER}\label{fig:02}
-\end{figure}
-\section{Discussion}
+%\centerline{\includegraphics{fig02.eps}} \caption{GAGGLE GENOME
+BROWSER}\label{fig:02} \end{figure} \section{Discussion}
 
 If a putative peak passes all of the tests above, Pique concludes that
 the peak ``looks'' like a peak. To make sure that we are not finding
 horsies by gazing at clouds, we also require that the integral of the
 coverage in the raw data within the putative peak region exceeds the
-integral of the coverage in the background by a margin set by the
-user. (Other tests for statistical significance may also work, be more
-shiny, et cetera. For example, Monte Carlo simulations of random
-subsamples of the ChIP track and the background track until a
-coalescent is found. YES - WHAT/HOW IS THE CURRENT BG SELECTED?
+integral of the coverage in the background by a margin set by the user.
+(Other tests for statistical significance may also work, be more shiny,
+et cetera. For example, Monte Carlo simulations of random subsamples of
+the ChIP track and the background track until a coalescent is found. YES
+- WHAT/HOW IS THE CURRENT BG SELECTED?
 
 
-\section{Conclusion}
-The choice of filter implies some specific assumptions about the
-nature of the coverage noise. The Wiener-Kolmogorov filter was the
-first and simplest statistical signal filter, first published by
-Norbert Wiener in 1949, and independently derived in discrete-time
-form by Andrey Kolmogorov in 1941. (SOME OF THIS COULD PERHAPS GO ABOVE?) The approach assumes the existence
-of two inputs; a ``true'' signal, and a noise source. Both are assumed
-to be stationary stochastic processes combined additively. We note that Pique should also work well with eukaryotic datasets provided they are gathered with greater coverage than has been previously reported.  
+\section{Conclusion} The choice of filter implies some specific
+assumptions about the nature of the coverage noise. The
+Wiener-Kolmogorov filter was the first and simplest statistical signal
+filter, first published by Norbert Wiener in 1949, and independently
+derived in discrete-time form by Andrey Kolmogorov in 1941. (SOME OF
+THIS COULD PERHAPS GO ABOVE?) The approach assumes the existence of two
+inputs; a ``true'' signal, and a noise source. Both are assumed to be
+stationary stochastic processes combined additively. We note that Pique
+should also work well with eukaryotic datasets provided they are
+gathered with greater coverage than has been previously reported.
 
 NEED SOME SUMMARY SHOWING THAT THE PIQUE WORKS
 
 NEED SOME RATIONALE FOR SELECTION OF FILTERS
 
-\section*{Acknowledgement}
-\paragraph{Funding\textcolon} This project was funded by UC Davis startup funds to MTF, NSF graduate fellowship AWARD NUMBER to EGW and DARPA AWARD NUMBER TO RN.
+\section*{Acknowledgement} \paragraph{Funding\textcolon} This project
+was funded by UC Davis startup funds to MTF, NSF graduate fellowship
+AWARD NUMBER to EGW and DARPA AWARD NUMBER TO RN.
 
-\bibliographystyle{natbib}
-\bibliographystyle{achemnat}
-\bibliographystyle{plainnat}
-\bibliographystyle{abbrv}
+\bibliographystyle{natbib} \bibliographystyle{achemnat}
+\bibliographystyle{plainnat} \bibliographystyle{abbrv}
 \bibliographystyle{bioinformatics}
 
 \bibliographystyle{plain}
