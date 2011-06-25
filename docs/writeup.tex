@@ -66,14 +66,14 @@ University of California, Davis.}
 
 \begin{abstract} \section{Motivation:}
 
-Most ChIP-Seq peak finders are designed to protein-DNA binding events in
-eukaryotic datasets. To make cost-effective use of current sequencing
-capacity, the peak finders must be cleverly optimized to work with
-sparse-coverage data, and must take into account the effect of chromatin
-structure on the variation in background coverage. While numerous
-effective peak finders have been developed for eukaryotic data, these
-algorithmic approaches can be suprisingly error prone in our hands when
-run on high-coverage bacterial and archaeal ChIP-Seq datasets.
+Most ChIP-Seq peak finders are designed to detect protein-DNA binding
+events in eukaryotic datasets. To make cost-effective use of current
+sequencing capacity, the peak finders must be cleverly optimized to work
+with sparse-coverage data, and must take into account the effect of
+chromatin structure on the variation in background coverage. While
+numerous effective peak finders have been developed for eukaryotic data,
+these algorithmic approaches can be suprisingly error prone when run on
+high-coverage bacterial and archaeal ChIP-Seq datasets.
 
 % Why not? Examples, evidence, hypothesis.
 
@@ -99,37 +99,34 @@ BSD-3 license at http://github.com/ryneches/pique.
 \section{Introduction} Next generation sequencing coupled with chromatin
 immunoprecipitation (ChIP-Seq) is revolutionizing our abilty to
 genomically map protein-DNA associations for a wide variety of proteins.
- The growing popularity of ChIP-Seq has spurred the  development of
-numerous peak picking algorithms. All but one, (CSDeconv (REF)) of the
-peak picking algorithms have been designed to perform well on eukaryotic
-datasets.  To make most cost-effective use of current sequencing
-abilities the peak picking methods have employed a number of
-sophisticated strategies to detect peaks in the typically sparcely
-covered eukaryotic datasets for which they are designed.  The problem of
-finding peaks in such data is apparently so challenging that over 30
-different methods have been published since 2007.  The relative
-performance of 11 represetative peak detection algorithms on eukatyoric
-data has been recently reviewed by Wilbanks and Facciotti (REF).
+The growing popularity of ChIP-Seq has spurred the development of over
+30 peak picking algorithms (for reviews see (REF1 and REF2)). The
+relative performance represetative peak detection algorithms on
+eukatyoric data and methods to assess performance have been recently
+reviewed by several authors (REF2,3,4).  To make most cost-effective use
+of current sequencing abilities the peak picking methods have employed a
+number of sophisticated strategies to detect peaks in the typically
+sparcely covered eukaryotic datasets for which they are designed.
 
 While ChIP-Seq has been predominantly used to interrogate protein-DNA
-interactions in eukaryotic systems (REFS) there are clear advantages to
+interactions in eukaryotic systems there are clear advantages to
 adopting this technology for studying microbial systems that are largely
 associated with the relatively small sizes of microbial genomes (e.g.
-the E. coli genome is ~2000 smaller than the human genome). 
+the E. coli genome is ~2000 smaller than the human genome).
 Surprisingly, however, existing peak detection algorithms designed for
 eukaryotic systems have, in our hands, been error prone with microbial
 ChIP-Seq data.  To our knowledge, only one other peak finding package,
-CSDeconv (REF) has been explicitly developed for finding peaks in
-microbial ChIP-Seq data.  This MATLAB package does a good job (WE THINK)
-of finding peaks in microbial ChIP-Seq data but it's broad applicaiton
-is limited by the requirement for the proprietary software package
-MATLAB, relatively slow performance and lack of easy peak curation
-options.  Herein we describe Pique, a conceptually simple, Python-based
-peak finding package that enables easy and rapid peak finding in
-bacterial and archaeal ChIP-Seq datasets.  The output is easily imported
-into the Gaggle Genome Browser (REF) to enable rapid manual peak list
-curation and analysis of ChIP-Seq data in the context of other
-Gaggle-enabled (REF) resources.
+CSDeconv (REF5) has been explicitly developed for finding peaks in
+microbial ChIP-Seq data.  This MATLAB package performs well with
+microbial ChIP-Seq data but it's broad applicaiton is limited by the
+requirement for the proprietary software upon which it is built,
+slow performance, and lack of integrated peak curation. 
+Herein we describe Pique, a conceptually simple, Python-based peak
+finding package that enables easy and rapid peak finding in bacterial
+and archaeal ChIP-Seq datasets.  The output is easily imported into the
+Gaggle Genome Browser (REF6) to enable rapid manual peak list curation
+and analysis of ChIP-Seq data in the context of other Gaggle-enabled
+(REF7) resources.
 
 \section{Approach} ChIP-seq in bacteria and archaea yields coverage
 several orders of magnitude larger than in eukaryotic systems.  This
@@ -140,17 +137,7 @@ ChIP-Seq data allows for greater simplicity of design through the use
 several standard algorithms and design principles from signal
 processing.
 
-Finally, given the importance of manual curation and settings
-optimization, Pique provides output suitable for use in the Gaggle
-Genome Browser. This permits convenient interactive curation of the peak
-list and analysis of the ChIP-Seq data in the context of other
-Gaggle-enabled resources.
-
-
-
 % design paradigm
-
-
 
 \begin{methods} \section{Methods}
 
