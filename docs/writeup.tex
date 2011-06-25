@@ -100,10 +100,10 @@ BSD-3 license at http://github.com/ryneches/pique.
 immunoprecipitation (ChIP-Seq) is revolutionizing our abilty to
 genomically map protein-DNA associations for a wide variety of proteins.
 The growing popularity of ChIP-Seq has spurred the development of over
-30 peak picking algorithms (for reviews see (REF1 and REF2)). The
+30 peak picking algorithms (for a nearly completely list see (REF1)). The
 relative performance represetative peak detection algorithms on
 eukatyoric data and methods to assess performance have been recently
-reviewed by several authors (REF2,3,4).  To make most cost-effective use
+reviewed by several authors (REF1,2,3,4,5).  To make most cost-effective use
 of current sequencing abilities the peak picking methods have employed a
 number of sophisticated strategies to detect peaks in the typically
 sparcely covered eukaryotic datasets for which they are designed.
@@ -116,7 +116,7 @@ the E. coli genome is ~2000 smaller than the human genome).
 Surprisingly, however, existing peak detection algorithms designed for
 eukaryotic systems have, in our hands, been error prone with microbial
 ChIP-Seq data.  To our knowledge, only one other peak finding package,
-CSDeconv (REF5) has been explicitly developed for finding peaks in
+CSDeconv (REF6) has been explicitly developed for finding peaks in
 microbial ChIP-Seq data.  This MATLAB package performs well with
 microbial ChIP-Seq data but it's broad applicaiton is limited by the
 requirement for the proprietary software upon which it is built,
@@ -124,9 +124,9 @@ slow performance, and lack of integrated peak curation.
 Herein we describe Pique, a conceptually simple, Python-based peak
 finding package that enables easy and rapid peak finding in bacterial
 and archaeal ChIP-Seq datasets.  The output is easily imported into the
-Gaggle Genome Browser (REF6) to enable rapid manual peak list curation
+Gaggle Genome Browser (REF7) to enable rapid manual peak list curation
 and analysis of ChIP-Seq data in the context of other Gaggle-enabled
-(REF7) resources.
+(REF8) resources.
 
 \section{Approach} ChIP-seq in bacteria and archaea yields coverage
 several orders of magnitude larger than in eukaryotic systems.  This
